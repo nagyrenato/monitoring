@@ -75,8 +75,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           #tags: ${{ steps.meta.outputs.tags }}
           #labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ steps.meta.outputs.versions }}
-          labels: ${{ steps.meta.outputs.version }}
+          tags: ${{ github.actor }}
+          labels: ${{ github.actor }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -92,4 +92,4 @@ jobs:
           COSIGN_EXPERIMENTAL: "true"
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
-        run: echo "${{ steps.meta.outputs.versions }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+        run: echo "${{ github.actor }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
