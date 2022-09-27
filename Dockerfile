@@ -1,5 +1,12 @@
-FROM openjdk:17-alpine
+FROM maven:3 as BUILD_IMAGE
+ENV APP_HOME=/root/dev/monitoring/
+RUN mkdir -p $APP_HOME/src/main/java
+WORKDIR $APP_HOME
+COPY . .
+RUN mvn -B package -e -X --file pom.xml
+
+FROM openjdk:17
+WORKDIR /root/
+COPY --from=BUILD_IMAGE /root/dev/monitoring/target/monitoring-*.jar .
 EXPOSE 8080
-ARG JAR_FILE=target/monitoring-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD java -jar monitoring-*.jar
