@@ -10,6 +10,6 @@ public class DemoController {
 
     @GetMapping("/test")
     public String getData() {
-        return "test-webhook";
+        return "test-webhook-2";
     }
 }
